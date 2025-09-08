@@ -35,8 +35,27 @@
 - **현장별 인력 현황**: 배치 인원 및 출근 현황 관리
 - **안전 관리**: 안전교육 이수 현황 및 사고 이력 추적
 
-## 📖 API 문서
+## 📖 API 문서: NodeJS+TS+Fastify
 
+### 설치
+```
+git clone git@github.com:KT-Beak-Ho/jikjikjik-Web-Worker.git
+cd jikjikjik-Web-Worker
+
+# 서브모듈 초기화 및 clone
+git submodule update --init --recursive
+
+npm i fastify @fastify/cors @fastify/helmet @fastify/rate-limit fastify-type-provider-zod zod dotenv
+npm i -D typescript tsx @types/node pino-pretty
+npm i @fastify/static
+```
+
+### 싫행
+```
+npm run dev
+
+localhost:3000/
+```
 ### 주요 엔드포인트
 
 ```
