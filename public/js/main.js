@@ -117,6 +117,69 @@ function initializeInteractions() {
             showNotification(`${text} 기능을 준비 중입니다! 📋`);
         });
     });
+
+    // 임금 관리 버튼들
+    document.querySelectorAll('.btn-payment').forEach(button => {
+        button.addEventListener('click', function() {
+            const text = this.textContent.trim();
+            if (text === '선택 지급') {
+                const checkedBoxes = document.querySelectorAll('.payment-checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    showNotification('지급할 직원을 선택해주세요! ✅');
+                } else {
+                    showNotification(`${checkedBoxes.length}명 선택 지급을 처리 중입니다! 💰`);
+                }
+            } else if (text === '일괄 지급') {
+                showNotification('전체 일괄 지급을 처리 중입니다! 💸');
+            }
+        });
+    });
+
+    // 서류 카드 클릭 이벤트
+    document.querySelectorAll('.document-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.querySelector('.document-title').textContent;
+            showNotification(`${title} 자동 생성 기능을 준비 중입니다! 📄`);
+        });
+    });
+
+    // 체크박스 전체 선택/해제 기능
+    let allChecked = false;
+    const selectAllButton = document.createElement('button');
+    selectAllButton.textContent = '전체 선택';
+    selectAllButton.className = 'btn-select-all';
+    selectAllButton.style.cssText = `
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 8px 16px;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    `;
+    
+    // const paymentList = document.querySelector('.payment-list');
+    // if (paymentList) {
+    //     paymentList.style.position = 'relative';
+    //     paymentList.appendChild(selectAllButton);
+        
+    //     selectAllButton.addEventListener('click', function() {
+    //         allChecked = !allChecked;
+    //         const checkboxes = document.querySelectorAll('.payment-checkbox');
+    //         checkboxes.forEach(checkbox => {
+    //             checkbox.checked = allChecked;
+    //         });
+            
+    //         this.textContent = allChecked ? '전체 해제' : '전체 선택';
+    //         this.style.background = allChecked ? '#3182f6' : '#f0f0f0';
+    //         this.style.color = allChecked ? 'white' : '#333';
+            
+    //         showNotification(allChecked ? '전체 선택됨' : '전체 해제됨');
+    //     });
+    // }
 }
 
 // 스크롤 효과 초기화
