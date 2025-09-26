@@ -1,24 +1,48 @@
 {
+    "name": "jikjikjik-business",
+    "version": "1.0.0",
+    "description": "직직직 사업자 홈페이지 - AI 건설 인력 매칭 플랫폼",
+    "main": "dist/server.js",
     "type": "module",
     "scripts": {
-        "dev": "tsx watch src/server.ts",
-        "build": "tsc",
-        "start": "node dist/server.js"
+      "build": "tsc",
+      "start": "node dist/server.js",
+      "dev": "tsx watch src/server.ts",
+      "clean": "rm -rf dist",
+      "lint": "eslint src/**/*.ts",
+      "format": "prettier --write src/**/*.ts",
+      "type-check": "tsc --noEmit"
     },
+    "keywords": [
+      "construction",
+      "workforce",
+      "ai",
+      "matching",
+      "fastify",
+      "typescript"
+    ],
+    "author": "직직직 팀",
+    "license": "MIT",
     "dependencies": {
-        "@fastify/cors": "^11.1.0",
-        "@fastify/helmet": "^13.0.1",
-        "@fastify/rate-limit": "^10.3.0",
-        "@fastify/static": "^8.2.0",
-        "dotenv": "^17.2.2",
-        "fastify": "^5.6.1",
-        "fastify-type-provider-zod": "^6.0.0",
-        "zod": "^4.1.11"
+      "fastify": "^4.24.3",
+      "@fastify/static": "^6.12.0",
+      "@fastify/cors": "^8.4.0",
+      "@fastify/helmet": "^11.1.1",
+      "@fastify/rate-limit": "^8.0.3",
+      "bcryptjs": "^2.4.3",
+      "jsonwebtoken": "^9.0.2",
+      "nodemailer": "^6.9.7"
     },
     "devDependencies": {
-        "@types/node": "^24.5.2",
-        "pino-pretty": "^13.1.1",
-        "tsx": "^4.20.6",
-        "typescript": "^5.9.2"
+      "@types/node": "^20.9.0",
+      "@types/bcryptjs": "^2.4.6",
+      "@types/jsonwebtoken": "^9.0.5",
+      "@types/nodemailer": "^6.4.14",
+      "typescript": "^5.2.2",
+      "tsx": "^4.1.4",
+      "@typescript-eslint/eslint-plugin": "^6.11.0",
+      "@typescript-eslint/parser": "^6.11.0",
+      "eslint": "^8.54.0",
+      "prettier": "^3.1.0"
     }
-}
+  }
