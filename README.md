@@ -39,8 +39,8 @@
 
 ### 설치
 ```
-git clone git@github.com:KT-Beak-Ho/jikjikjik-Web-Worker.git
-cd jikjikjik-Web-Worker
+git clone git@github.com:KT-Beak-Ho/jikjikjik-Web-Company.git
+cd jikjikjik-Web-Company
 
 # 서브모듈 초기화 및 clone
 git submodule update --init --recursive
