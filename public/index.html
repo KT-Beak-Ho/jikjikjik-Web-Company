@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>직직직 사업자 - AI 건설 인력 매칭 플랫폼</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/login-modal.css">
 </head>
 <body>
     <!-- 헤더 -->
@@ -15,7 +16,7 @@
                 <a href="#features">주요 기능</a>
                 <a href="#dashboard">실제 화면</a>
                 <a href="#contact">문의하기</a>
-                <button class="btn-start">시작하기</button>
+                <button class="btn-start" onclick="showLoginModal()">시작하기</button>
             </div>
         </nav>
     </header>
@@ -47,7 +48,7 @@
                     </div>
                 </div>
                 <div class="hero-buttons">
-                    <button class="btn-primary">무료로 시작하기</button>
+                    <button class="btn-primary" onclick="showLoginModal()">무료로 시작하기</button>
                     <button class="btn-secondary">데모 보기</button>
                 </div>
             </div>
@@ -501,7 +502,7 @@
             <h2>건설 현장 관리의 새로운 기준</h2>
             <p>지금 시작하고 첫 달 무료로 모든 기능을 체험해보세요</p>
             <div class="cta-buttons">
-                <button class="btn-cta">무료로 시작하기</button>
+                <button class="btn-cta" onclick="showLoginModal()">무료로 시작하기</button>
                 <button class="btn-cta btn-cta-secondary">상담 신청하기</button>
             </div>
         </div>
@@ -557,5 +558,11 @@
 
     <!-- JavaScript 파일 -->
     <script src="./js/main.js"></script>
+    <script src="./js/login.js"></script>
+
+    <!-- 로그인 모달 -->
+    <div id="loginModalContainer"></div>
+  
+  </div>
 </body>
 </html>
