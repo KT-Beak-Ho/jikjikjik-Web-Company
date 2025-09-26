@@ -6,8 +6,51 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initializeAnimations();
     initializeInteractions();
-    initializeScrollEffects();
+        
+    initializeLogin();
 });
+
+// 로그인 초기화
+function initializeLogin() {
+    // 로그인 폼 제출 처리
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const remember = formData.get('remember');
+            
+            // 간단한 유효성 검사
+            if (!email || !password) {
+                showNotification('이메일과 비밀번호를 입력해주세요!', 'error');
+                return;
+            }
+            
+            // 샘플 로그인 처리
+            handleSampleLogin(email, password, remember);
+        });
+    }
+
+    // 회원가입 링크 클릭
+    const signupLink = document.querySelector('.signup-link');
+    if (signupLink) {
+        signupLink.addEventListener('click', function() {
+            showNotification('회원가입 기능을 준비 중입니다!');
+        });
+    }
+
+    // 비밀번호 찾기 링크
+    const forgotLink = document.querySelector('.login-footer .login-link');
+    if (forgotLink) {
+        forgotLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showNotification('비밀번호 찾기 기능을 준비 중입니다!');
+        });
+    }
+}
 
 // 애니메이션 초기화
 function initializeAnimations() {
@@ -98,7 +141,8 @@ function initializeInteractions() {
             if (text.includes('상담')) {
                 showNotification('상담 신청 기능을 준비 중입니다! 📞');
             } else {
-                showNotification('서비스를 준비 중입니다! 🚀');
+                showLoginModal();
+                //showNotification('서비스를 준비 중입니다! 🚀');
             }
         });
     });
@@ -106,7 +150,8 @@ function initializeInteractions() {
     // 기본 시작하기 버튼들
     document.querySelectorAll('.btn-start, .btn-primary').forEach(button => {
         button.addEventListener('click', function() {
-            showNotification('서비스를 준비 중입니다! 곧 만나요! ✨');
+            showLoginModal();
+            //showNotification('서비스를 준비 중입니다! 곧 만나요! ✨');
         });
     });
 
@@ -117,6 +162,69 @@ function initializeInteractions() {
             showNotification(`${text} 기능을 준비 중입니다! 📋`);
         });
     });
+
+    // 임금 관리 버튼들
+    document.querySelectorAll('.btn-payment').forEach(button => {
+        button.addEventListener('click', function() {
+            const text = this.textContent.trim();
+            if (text === '선택 지급') {
+                const checkedBoxes = document.querySelectorAll('.payment-checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    showNotification('지급할 직원을 선택해주세요! ✅');
+                } else {
+                    showNotification(`${checkedBoxes.length}명 선택 지급을 처리 중입니다! 💰`);
+                }
+            } else if (text === '일괄 지급') {
+                showNotification('전체 일괄 지급을 처리 중입니다! 💸');
+            }
+        });
+    });
+
+    // 서류 카드 클릭 이벤트
+    document.querySelectorAll('.document-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.querySelector('.document-title').textContent;
+            showNotification(`${title} 자동 생성 기능을 준비 중입니다! 📄`);
+        });
+    });
+
+    // 체크박스 전체 선택/해제 기능
+    let allChecked = false;
+    const selectAllButton = document.createElement('button');
+    selectAllButton.textContent = '전체 선택';
+    selectAllButton.className = 'btn-select-all';
+    selectAllButton.style.cssText = `
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 8px 16px;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    `;
+    
+    // const paymentList = document.querySelector('.payment-list');
+    // if (paymentList) {
+    //     paymentList.style.position = 'relative';
+    //     paymentList.appendChild(selectAllButton);
+        
+    //     selectAllButton.addEventListener('click', function() {
+    //         allChecked = !allChecked;
+    //         const checkboxes = document.querySelectorAll('.payment-checkbox');
+    //         checkboxes.forEach(checkbox => {
+    //             checkbox.checked = allChecked;
+    //         });
+            
+    //         this.textContent = allChecked ? '전체 해제' : '전체 선택';
+    //         this.style.background = allChecked ? '#3182f6' : '#f0f0f0';
+    //         this.style.color = allChecked ? 'white' : '#333';
+            
+    //         showNotification(allChecked ? '전체 선택됨' : '전체 해제됨');
+    //     });
+    // }
 }
 
 // 스크롤 효과 초기화
@@ -183,32 +291,50 @@ function initializeScrollEffects() {
     });
 }
 
-// 알림 표시 함수
-function showNotification(message) {
+// 알림 표시 함수 (개선된 버전)
+function showNotification(message, type = 'info') {
     // 기존 알림이 있으면 제거
     const existingNotification = document.querySelector('.notification');
     if (existingNotification) {
         existingNotification.remove();
     }
 
+    // 타입별 색상 설정
+    const colors = {
+        success: { bg: '#10b981', icon: '✅' },
+        error: { bg: '#ef4444', icon: '❌' },
+        warning: { bg: '#f59e0b', icon: '⚠️' },
+        info: { bg: '#3182f6', icon: '💡' }
+    };
+
+    const color = colors[type] || colors.info;
+
     // 새 알림 생성
     const notification = document.createElement('div');
     notification.className = 'notification';
-    notification.textContent = message;
+    notification.innerHTML = `
+        <span class="notification-icon">${color.icon}</span>
+        <span class="notification-text">${message}</span>
+    `;
+    
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 24px;
-        background: #3182f6;
+        background: ${color.bg};
         color: white;
-        padding: 16px 24px;
+        padding: 16px 20px;
         border-radius: 12px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         z-index: 10000;
         font-weight: 500;
         font-size: 14px;
-        max-width: 300px;
+        max-width: 350px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        backdrop-filter: blur(10px);
     `;
 
     // 애니메이션 키프레임 추가
@@ -249,6 +375,18 @@ function showNotification(message) {
             notification.parentNode.removeChild(notification);
         }
     }, 3000);
+
+    // 클릭으로 제거
+    notification.addEventListener('click', () => {
+        if (notification && notification.parentNode) {
+            notification.style.animation = 'fadeOut 0.2s ease forwards';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 200);
+        }
+    });
 }
 
 // 유틸리티 함수들
@@ -292,7 +430,97 @@ const utils = {
     }
 };
 
-// 개발용 로깅
-console.log('🎨 직직직 UI 시스템 초기화 완료');
-console.log('📱 반응형 디자인 활성화');
-console.log('✨ 인터랙션 애니메이션 준비됨');
+// 로그인 모달 표시/숨기기
+function showLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hideLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// 샘플 로그인 처리
+function handleSampleLogin(email, password, remember) {
+    // 샘플 계정들
+    const sampleUsers = [
+        { email: 'admin@demo.com', password: 'admin123', name: '관리자', company: '데모건설' },
+        { email: 'manager@test.com', password: 'test123', name: '김매니저', company: '테스트건설' },
+        { email: 'user@sample.com', password: 'sample123', name: '이담당', company: '샘플건설' }
+    ];
+    
+    // 로그인 시뮬레이션
+    showNotification('로그인 중입니다...', 'info');
+    
+    setTimeout(() => {
+        const user = sampleUsers.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            // 로그인 성공
+            showNotification(`환영합니다, ${user.name}님!`, 'success');
+            hideLoginModal();
+            
+            // 로그인 상태 표시 (간단한 데모)
+            updateUIForLoggedInUser(user);
+        } else {
+            // 로그인 실패
+            showNotification('이메일 또는 비밀번호가 올바르지 않습니다.', 'error');
+        }
+    }, 1000);
+}
+
+// 로그인된 사용자 UI 업데이트
+function updateUIForLoggedInUser(user) {
+    const startButtons = document.querySelectorAll('.btn-start, .btn-primary, .btn-cta');
+    startButtons.forEach(btn => {
+        if (btn.textContent.includes('시작') || btn.textContent.includes('무료')) {
+            btn.textContent = '대시보드';
+            btn.onclick = function() {
+                showNotification('대시보드로 이동합니다!');
+            };
+        }
+    });
+    
+    // 헤더에 사용자 정보 표시
+    const nav = document.querySelector('nav');
+    if (nav && !nav.querySelector('.user-info')) {
+        const userInfo = document.createElement('div');
+        userInfo.className = 'user-info';
+        userInfo.innerHTML = `
+            <span class="user-name">${user.name}</span>
+            <span class="user-company">${user.company}</span>
+        `;
+        userInfo.style.cssText = `
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            margin-right: 16px;
+            font-size: 14px;
+        `;
+        
+        const startBtn = nav.querySelector('.btn-start');
+        nav.insertBefore(userInfo, startBtn);
+    }
+}
+
+// 모달 외부 클릭으로 닫기
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('loginModal');
+    if (e.target === modal) {
+        hideLoginModal();
+    }
+});
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideLoginModal();
+    }
+});

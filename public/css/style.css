@@ -553,10 +553,201 @@ nav {
     color: #b91c1c;
 }
 
-/* 주요 기능 섹션 */
-.features {
+/* 임금 관리 섹션 */
+.payment-section {
+    padding: 40px;
+    background: white;
+    border-radius: 24px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.payment-title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-payment {
+    padding: 12px 24px;
+    background: #3182f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-payment:hover {
+    background: #1b64da;
+    transform: translateY(-1px);
+}
+
+.payment-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.payment-summary-card {
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+
+.payment-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-summary-label {
+    font-size: 14px;
+    color: #8b95a1;
+    margin-bottom: 8px;
+}
+
+.payment-summary-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.payment-list {
+    border: 1px solid #e5e8eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.payment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e5e8eb;
+    transition: all 0.2s;
+}
+
+.payment-item:hover {
+    background: #f9fafb;
+}
+
+.payment-item:last-child {
+    border-bottom: none;
+}
+
+.payment-worker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.payment-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.payment-amount {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.payment-status {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* 자동 서류 생성 섹션 */
+.document-section {
     padding: 80px 24px;
     background: #f9fafb;
+}
+
+.document-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.document-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.document-card {
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.document-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.document-icon {
+    width: 64px;
+    height: 64px;
+    background: #e8f3ff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+}
+
+.document-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.document-desc {
+    font-size: 14px;
+    color: #8b95a1;
+    line-height: 1.5;
+}
+
+/* 임금 지급 관리 기능 섹션 */
+.payment-feature {
+    padding: 80px 24px;
+    background: white;
+}
+
+.payment-feature-container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .features-container {
@@ -798,6 +989,7 @@ footer {
 
     .dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 
     .features-grid {
@@ -808,6 +1000,7 @@ footer {
     .site-stats {
         flex-direction: column;
         gap: 8px;
+        text-align: center;
     }
     
     .footer-container {
@@ -834,6 +1027,82 @@ footer {
         flex-direction: column;
         align-items: center;
     }
+
+    /* 임금 관리 섹션 모바일 */
+    .payment-summary {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .payment-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .payment-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .payment-item {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .payment-worker {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* 서류 생성 섹션 모바일 */
+    .document-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .document-card {
+        padding: 24px;
+    }
+
+    /* 출근부 테이블 모바일 */
+    .attendance-table {
+        font-size: 14px;
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 8px 6px;
+    }
+
+    .attendance-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .attendance-filter {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* 사이트 아이템 모바일 */
+    .site-item {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .site-info {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .site-actions {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -845,6 +1114,72 @@ footer {
     .hero-buttons {
         flex-direction: column;
         gap: 12px;
+    }
+
+    /* 대시보드 카드 모바일 */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card {
+        padding: 20px;
+        text-align: center;
+    }
+
+    /* 임금 관리 모바일 */
+    .payment-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-section {
+        padding: 24px 20px;
+    }
+
+    .payment-actions {
+        flex-direction: column;
+    }
+
+    /* 네비게이션 모바일 */
+    .nav-links {
+        display: none; /* 모바일에서는 햄버거 메뉴로 대체 가능 */
+    }
+
+    /* 작은 화면에서 테이블 스크롤 */
+    .attendance-preview {
+        overflow-x: auto;
+        padding: 20px;
+    }
+
+    .attendance-table {
+        min-width: 600px;
+    }
+
+    /* 푸터 연락처 정보 */
+    .footer-contact {
+        text-align: center;
+    }
+
+    /* 섹션 패딩 조정 */
+    .hero,
+    .service-demo,
+    .features,
+    .document-section,
+    .payment-feature,
+    .cta {
+        padding: 60px 20px;
+    }
+
+    /* 타이틀 크기 조정 */
+    .section-title {
+        font-size: 28px;
+    }
+
+    .feature-content h3 {
+        font-size: 24px;
+    }
+
+    .cta h2 {
+        font-size: 32px;
     }
 }* {
     margin: 0;
