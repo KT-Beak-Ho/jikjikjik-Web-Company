@@ -1,12 +1,5 @@
 // 로그인 모달 관련 JavaScript
 
-// 샘플 사용자 계정
-const SAMPLE_USERS = [
-    { email: 'admin@demo.com', password: 'admin123', name: '관리자', company: '데모건설' },
-    { email: 'manager@test.com', password: 'test123', name: '김매니저', company: '테스트건설' },
-    { email: 'user@sample.com', password: 'sample123', name: '이담당', company: '샘플건설' }
-];
-
 // 모달 표시 함수
 function showLoginModal() {
     const modal = document.getElementById('loginModal');
@@ -55,7 +48,6 @@ function initializeModal() {
         closeButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log('X 버튼 클릭됨');
             hideLoginModal();
         });
     }
@@ -94,7 +86,7 @@ function initializeModal() {
         });
     }
     
-    // 연락처 필드에 포맷팅 이벤트 추가
+    // 회원가입 연락처 필드에 포맷팅 이벤트 추가
     const phoneInput = document.querySelector('input[name="phone"]');
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {
@@ -111,40 +103,130 @@ function initializeModal() {
         });
     });
 
+    initializePasswordToggle();
+
     console.log('로그인 모달 초기화 완료');
 }
 
+// 비밀번호 토글 기능 초기화
+function initializePasswordToggle() {
+    const passwordToggles = document.querySelectorAll('.password-toggle');
+    
+    passwordToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 해당 input 찾기
+            const passwordField = this.closest('.password-field');
+            const passwordInput = passwordField.querySelector('input');
+            const eyeOpen = this.querySelector('.eye-open');
+            const eyeClosed = this.querySelector('.eye-closed');
+            
+            if (passwordInput.type === 'password') {
+                // 비밀번호 보이기
+                passwordInput.type = 'text';
+                this.setAttribute('data-visible', 'true');
+                this.setAttribute('title', '비밀번호 숨기기');
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            } else {
+                // 비밀번호 숨기기
+                passwordInput.type = 'password';
+                this.setAttribute('data-visible', 'false');
+                this.setAttribute('title', '비밀번호 보기');
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            }
+        });
+        
+        // 초기 상태 설정
+        toggle.setAttribute('data-visible', 'false');
+        toggle.setAttribute('title', '비밀번호 보기');
+    });
+}
+
 // 로그인 폼 제출 처리
-function handleLoginSubmit(event) {
+async function handleLoginSubmit(event) {
     event.preventDefault();
     
     // 기존 에러 메시지 제거
     removeFormError();
     
     const formData = new FormData(event.target);
-    const email = formData.get('email');
+    const loginIdOrPhone = formData.get('loginIdOrPhone');
     const password = formData.get('password');
     const remember = formData.get('remember');
     
-    // 기본 유효성 검사
-    if (!email || !password) {
+    // 클라이언트 유효성 검사
+    if (!loginIdOrPhone || !password) {
         showFormError('모든 필드를 입력해주세요.');
         return;
     }
     
-    if (!LoginUtils.validateEmail(email)) {
-        showFormError('올바른 이메일 주소를 입력해주세요.');
-        return;
-    }
+    // if (!LoginUtils.validateEmail(email)) {
+    //     showFormError('올바른 이메일 주소를 입력해주세요.');
+    //     return;
+    // }
 
     // 로그인 시도 횟수 확인
-    if (!LoginUtils.checkLoginAttempts(email)) {
+    if (!LoginUtils.checkLoginAttempts(loginIdOrPhone)) {
         showFormError('로그인 시도 횟수를 초과했습니다. 15분 후 다시 시도해주세요.');
         return;
     }
     
-    // 샘플 로그인 처리
-    handleSampleLogin(email, password, remember);
+    try {
+        showNotification('로그인 중입니다...', 'info');
+        
+        // API 요청 데이터 준비
+        const loginRequest = {
+            loginIdOrPhone: loginIdOrPhone,
+            password: password,
+            deviceToken: authService.generateDeviceToken()
+        };
+        
+        // 실제 API 호출
+        const response = await authService.login(loginRequest);
+        
+        // 로그인 성공
+        LoginUtils.recordLoginAttempt(loginIdOrPhone, true);
+        showNotification('로그인이 완료되었습니다!', 'success');
+        
+        // 토큰 저장
+        authService.saveTokens(
+            response.data.accessToken,
+            response.data.refreshToken,
+            response.data.memberId,
+            response.data.role
+        );
+        
+        // 사용자 정보 생성 (UI 표시용)
+        const userInfo = {
+            id: response.data.memberId,
+            name: "홍길동", // 이메일에서 이름 추출 (임시)
+            email: "jikjikjik@company.kr",
+            company: '직직직', // 기본값
+            role: response.data.role
+        };
+        
+        // UI 업데이트
+        updateUIForLoggedInUser(userInfo);
+        
+        // remember 옵션이 체크된 경우 세션 저장
+        if (remember) {
+            saveUserSession(userInfo);
+        }
+        
+        hideLoginModal();
+        
+    } catch (error) {
+        LoginUtils.recordLoginAttempt(loginIdOrPhone, false);
+        
+        // 백엔드에서 제공하는 에러 메시지를 그대로 사용
+        const errorMessage = authService.getErrorMessage(error);
+        showFormError(errorMessage);
+        
+        console.error('Login error:', error);
+    }
 }
 
 // 회원가입 폼 제출 처리
@@ -212,33 +294,6 @@ function handleSignupSubmit(event) {
     }, 1500);
 }
 
-// 샘플 로그인 처리
-function handleSampleLogin(email, password, remember) {
-    showNotification('로그인 중입니다...', 'info');
-    
-    setTimeout(() => {
-        const user = SAMPLE_USERS.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-            // 로그인 성공
-            LoginUtils.recordLoginAttempt(email, true);
-            showNotification(`환영합니다, ${user.name}님!`, 'success');
-            hideLoginModal();
-            
-            // 로그인 상태 표시
-            updateUIForLoggedInUser(user);
-            
-            // 로그인 정보 저장
-            if (remember) {
-                saveUserSession(user);
-            }
-        } else {
-            // 로그인 실패
-            LoginUtils.recordLoginAttempt(email, false);
-            showFormError('이메일 또는 비밀번호가 올바르지 않습니다.');
-        }
-    }, 1000);
-}
 
 // 로그인된 사용자 UI 업데이트
 function updateUIForLoggedInUser(user) {
@@ -262,6 +317,7 @@ function updateUIForLoggedInUser(user) {
         userInfo.innerHTML = `
             <div class="user-details">
                 <span class="user-name">${user.name}</span>
+                <span class="user-separator">·</span>
                 <span class="user-company">${user.company}</span>
             </div>
             <button class="user-menu-btn" onclick="showUserMenu()">▼</button>
@@ -277,11 +333,18 @@ function updateUIForLoggedInUser(user) {
             border: 1px solid #e5e8eb;
         `;
         
+        const userSeparator = userInfo.querySelector('.user-separator');
+        userSeparator.style.cssText = `
+            color: #d1d5db;
+            font-size: 12px;
+        `
+
         const userDetails = userInfo.querySelector('.user-details');
         userDetails.style.cssText = `
             display: flex;
-            flex-direction: column;
-            text-align: right;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
             font-size: 14px;
         `;
         
@@ -307,9 +370,10 @@ function updateUIForLoggedInUser(user) {
             padding: 4px;
         `;
         
+        const navLinks = nav.querySelector('.nav-links');
         const startBtn = nav.querySelector('.btn-start');
         if (startBtn) {
-            nav.insertBefore(userInfo, startBtn);
+            navLinks.replaceChild(userInfo, startBtn);
             startBtn.style.display = 'none';
         }
     }
@@ -393,28 +457,53 @@ function showUserMenu() {
 }
 
 // 로그아웃 처리
-function handleLogout() {
-    showNotification('로그아웃 되었습니다.', 'info');
-    
-    // 사용자 정보 제거
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo) {
-        userInfo.remove();
+async function handleLogout() {
+    try {
+        showNotification('로그아웃 중입니다...', 'info');
+        
+        // 토큰 삭제
+        authService.clearTokens();
+        
+        showNotification('로그아웃 되었습니다.', 'info');
+        
+    } catch (error) {
+        console.error('로그아웃 오류:', error);
+        showNotification('로그아웃 되었습니다.', 'info');
     }
     
-    // 버튼들을 원래대로 복원
-    const startButtons = document.querySelectorAll('.btn-start, .btn-primary, .btn-cta');
-    startButtons.forEach(btn => {
+    // 사용자 정보 제거하고 원래 버튼 복원
+    const userInfo = document.querySelector('.user-info');
+    if (userInfo) {
+        const navLinks = userInfo.closest('.nav-links');
+        
+        // 새로운 시작하기 버튼 생성
+        const newStartBtn = document.createElement('button');
+        newStartBtn.className = 'btn-start';
+        newStartBtn.textContent = '시작하기';
+        newStartBtn.setAttribute('data-action', 'show-login');
+        
+        // userInfo를 새 버튼으로 교체
+        if (navLinks) {
+            navLinks.replaceChild(newStartBtn, userInfo);
+        } else {
+            // navLinks가 없으면 그냥 제거
+            userInfo.remove();
+        }
+    }
+    
+    // 다른 버튼들을 원래대로 복원
+    const otherButtons = document.querySelectorAll('.btn-primary, .btn-cta');
+    otherButtons.forEach(btn => {
         if (btn.textContent === '대시보드') {
-            if (btn.classList.contains('btn-start')) {
-                btn.textContent = '시작하기';
-                btn.style.display = 'block';
-            } else if (btn.classList.contains('btn-primary')) {
+            if (btn.classList.contains('btn-primary')) {
                 btn.textContent = '무료로 시작하기';
             } else if (btn.classList.contains('btn-cta')) {
                 btn.textContent = '무료로 시작하기';
             }
-            btn.onclick = showLoginModal;
+            
+            // 이벤트 리스너 재설정 (CSP 안전)
+            btn.onclick = null;
+            btn.setAttribute('data-action', 'show-login');
         }
     });
     
@@ -430,28 +519,38 @@ function saveUserSession(user) {
     }));
 }
 
-// 사용자 세션 불러오기
+// 사용자 세션 불러오기 (토큰 기반)
 function loadUserSession() {
-    const userSession = localStorage.getItem('jikjikjik_user');
-    if (userSession) {
-        try {
+    try {
+        // 토큰 확인
+        const tokens = authService.getStoredTokens();
+        if (!tokens) return null;
+        
+        // 기존 사용자 세션 정보 확인
+        const userSession = localStorage.getItem('jikjikjik_user');
+        if (userSession) {
             const user = JSON.parse(userSession);
-            // 24시간 이내 로그인만 유효
-            const loginTime = new Date(user.loginTime);
-            const now = new Date();
-            const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
-            
-            if (hoursDiff < 24) {
-                updateUIForLoggedInUser(user);
-                return user;
-            } else {
-                clearUserSession();
-            }
-        } catch (e) {
-            clearUserSession();
+            updateUIForLoggedInUser(user);
+            return user;
         }
+        
+        // 토큰은 있지만 사용자 정보가 없는 경우 기본 정보 생성
+        const defaultUser = {
+            id: tokens.memberId,
+            name: '홍길동',
+            email: 'jikjikjik@company.kr',
+            company: '직직직',
+            role: tokens.role
+        };
+        
+        updateUIForLoggedInUser(defaultUser);
+        return defaultUser;
+        
+    } catch (error) {
+        console.error('세션 로드 오류:', error);
+        authService.clearTokens();
+        return null;
     }
-    return null;
 }
 
 // 사용자 세션 삭제
@@ -618,8 +717,8 @@ const LoginUtils = {
     },
     
     // 로그인 시도 횟수 제한
-    checkLoginAttempts: function(email) {
-        const key = `login_attempts_${email}`;
+    checkLoginAttempts: function(loginIdOrPhone) {
+        const key = `login_attempts_${loginIdOrPhone}`;
         const attempts = JSON.parse(localStorage.getItem(key) || '{"count": 0, "lastAttempt": 0}');
         const now = Date.now();
         
@@ -632,8 +731,8 @@ const LoginUtils = {
     },
     
     // 로그인 시도 기록
-    recordLoginAttempt: function(email, success) {
-        const key = `login_attempts_${email}`;
+    recordLoginAttempt: function(loginIdOrPhone, success) {
+        const key = `login_attempts_${loginIdOrPhone}`;
         const attempts = JSON.parse(localStorage.getItem(key) || '{"count": 0, "lastAttempt": 0}');
         
         if (success) {
@@ -655,6 +754,17 @@ document.addEventListener('keydown', function(event) {
 
 // DOM 로드 완료 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
+    // 전역 클릭 이벤트 위임 추가
+    document.addEventListener('click', function(e) {
+        const action = e.target.getAttribute('data-action');
+        
+        if (action === 'show-login') {
+            e.preventDefault();
+            showLoginModal();
+        }
+    });
+
+
     // 페이지 로드 시 세션 확인
     loadUserSession();
     
@@ -665,7 +775,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.text())
             .then(data => {
                 loginModalContainer.innerHTML = data;
-                initializeModal(); // 모달 로드 후 초기화
+                // 모달 로드 즉시 초기화
+                setTimeout(() => {
+                    initializeModal();
+                    //setupCloseButton(); // 추가 X 버튼 설정
+                }, 100);
             })
             .catch(error => {
                 console.error('로그인 모달 로드 오류:', error);

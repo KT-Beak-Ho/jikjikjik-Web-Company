@@ -260,6 +260,66 @@
     animation: errorSlideIn 0.3s ease-out;
 }
 
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input {
+    padding-right: 50px !important;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 6px 6px 0;
+    transition: all 0.2s ease;
+    color: #6b7280;
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: #374151;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.password-toggle:active {
+    transform: scale(0.95);
+}
+
+.password-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    transition: opacity 0.2s ease;
+}
+
+.password-toggle[data-visible="true"] .eye-open {
+    display: none;
+}
+
+.password-toggle[data-visible="true"] .eye-closed {
+    display: block !important;
+}
+
+.password-toggle[data-visible="false"] .eye-open {
+    display: block;
+}
+
+.password-toggle[data-visible="false"] .eye-closed {
+    display: none;
+}
+
 @keyframes errorSlideIn {
     from {
         opacity: 0;
