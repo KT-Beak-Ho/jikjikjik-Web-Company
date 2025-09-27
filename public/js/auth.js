@@ -294,6 +294,60 @@ class AuthService {
     isLoggedIn() {
         return this.getStoredTokens() !== null;
     }
+
+    /**
+     * 회원가입 API 호출
+     */
+    async join(request, signatureImage = '') {
+        try {
+            console.log('회원가입 시도');
+
+            const formData = new FormData();
+            formData.append('request', JSON.stringify(request));
+            formData.append('signatureImage', signatureImage);
+
+            const response = await fetch(`${this.baseUrl}/join/company/join`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: formData
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                if (responseData.data && responseData.data.errorMessage) {
+                    const apiError = {
+                        message: responseData.data.errorMessage,
+                        status: response.status,
+                        code: responseData.data.code,
+                        errorType: responseData.data.status
+                    };
+                    throw apiError;
+                } else {
+                    throw {
+                        message: responseData.message || `서버 오류가 발생했습니다. (${response.status})`,
+                        status: response.status
+                    };
+                }
+            }
+
+            console.log('회원가입 성공');
+            return responseData;
+        } catch (error) {
+            console.error('회원가입 실패:', error);
+
+            if (error && typeof error === 'object' && 'message' in error) {
+                throw error;
+            }
+
+            throw {
+                message: '서버에 연결할 수 없습니다. 네트워크를 확인해주세요.',
+                status: 0
+            };
+        }
+    }
 }
 
 // 전역 인스턴스 생성

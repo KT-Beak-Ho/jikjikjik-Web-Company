@@ -230,7 +230,7 @@ async function handleLoginSubmit(event) {
 }
 
 // 회원가입 폼 제출 처리
-function handleSignupSubmit(event) {
+async function handleSignupSubmit(event) {
     event.preventDefault();
     
     // 기존 에러 메시지 제거
@@ -243,6 +243,7 @@ function handleSignupSubmit(event) {
     const companyName = formData.get('companyName');
     const managerName = formData.get('managerName');
     const phone = formData.get('phone');
+    const phone_id = formData.get('phone').replace(/-/g, '');
     const agreeTerms = formData.get('agreeTerms');
     
     // 기본 유효성 검사
@@ -275,23 +276,46 @@ function handleSignupSubmit(event) {
         showFormError('이용약관에 동의해주세요.');
         return;
     }
-    
-    const signupData = {
-        companyName: companyName,
-        managerName: managerName,
-        email: email,
-        password: password,
-        phone: phone,
-        agreeTerms: agreeTerms
-    };
-    
-    console.log('회원가입 시도:', signupData);
-    
-    // 임시 성공 처리
-    showSuccessMessage('회원가입이 완료되었습니다!');
-    setTimeout(() => {
-        switchTab('login');
-    }, 1500);
+
+    try {
+
+        showNotification('회원가입 중입니다...', 'info');
+        
+        // API 요청 데이터 준비
+        const signupData = {
+            loginId : phone_id,
+            password: password,
+            phone: phone_id,
+            role : "ROLE_COMPANY",
+            deviceToken : "token",
+            businessNumber : "000",
+            region : "서울",
+            companyName: companyName,
+            email: email,
+            manager: managerName,
+            inquiry : "직공 서비스에 가입하고 싶습니다."
+        };
+
+        console.log("signupData", signupData)
+        
+        // 실제 API 호출
+        const response = await authService.join(signupData);
+        
+        showNotification('회원가입이 완료되었습니다! 담당자 확인 후 가입 승인을 해드리겠습니다.', 'success');
+        showSuccessMessage('회원가입이 완료되었습니다!');
+        
+        setTimeout(() => {
+            switchTab('login');
+        }, 1500);
+        
+    } catch (error) {
+        
+        // 백엔드에서 제공하는 에러 메시지를 그대로 사용
+        const errorMessage = authService.getErrorMessage(error);
+        showFormError(errorMessage);
+        
+        console.error('Join error:', error);
+    }
 }
 
 
