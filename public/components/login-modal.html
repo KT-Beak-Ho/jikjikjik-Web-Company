@@ -1,0 +1,104 @@
+<div class="login-modal" id="loginModal">
+    <div class="login-container">
+        <button class="login-close">×</button>
+        
+        <div class="login-header">
+            <div class="login-logo">직직직</div>
+            <h2 class="login-title">건설 현장 관리의 시작</h2>
+            <p class="login-subtitle">AI 기반 스마트 인력 관리 시스템</p>
+        </div>
+
+        <div class="login-tabs">
+            <button class="login-tab active" data-tab="login">로그인</button>
+            <button class="login-tab" data-tab="signup">회원가입</button>
+        </div>
+
+        <!-- 로그인 폼 -->
+        <form class="login-form active" id="loginForm">
+            <div class="form-group">
+                <label class="form-label">로그인 ID or 전화번호</label>
+                <input type="text" class="form-input" placeholder="01000000000" name="loginIdOrPhone" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">비밀번호</label>
+                <div class="password-field">
+                    <input type="password" class="form-input password-input" placeholder="8자 이상 입력하세요" name="password" required>
+                    <button type="button" class="password-toggle" data-target="signup-password">
+                        <svg class="password-icon eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg class="password-icon eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-checkbox">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">로그인 상태 유지</label>
+            </div>
+
+            <button type="submit" class="login-submit">로그인</button>
+
+            <div class="login-footer">
+                <div class="login-forgot">
+                    비밀번호를 잊으셨나요? <button type="button" class="login-link">비밀번호 찾기</button>
+                </div>
+                <div class="login-signup">
+                    아직 계정이 없으신가요? 
+                    <button type="button" class="login-link signup-link" data-tab="signup">회원가입</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 회원가입 폼 -->
+        <form class="login-form" id="signupForm">
+            <div class="form-group">
+                <label class="form-label">회사명</label>
+                <input type="text" class="form-input" placeholder="회사명을 입력하세요" name="companyName" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">담당자명</label>
+                <input type="text" class="form-input" placeholder="담당자명을 입력하세요" name="managerName" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-input" placeholder="example@company.com" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">비밀번호</label>
+                <input type="password" class="form-input" placeholder="8자 이상 입력하세요" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">비밀번호 확인</label>
+                <input type="password" class="form-input" placeholder="비밀번호를 다시 입력하세요" name="confirmPassword" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">연락처</label>
+                <input type="tel" class="form-input" placeholder="010-0000-0000" name="phone" required>
+            </div>
+
+            <div class="form-checkbox">
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                <label for="agreeTerms">이용약관 및 개인정보처리방침에 동의합니다</label>
+            </div>
+
+            <button type="submit" class="login-submit">회원가입</button>
+
+            <div class="login-footer">
+                <div class="login-signup">
+                    이미 계정이 있으신가요? 
+                    <button type="button" class="login-link" data-tab="login">로그인</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

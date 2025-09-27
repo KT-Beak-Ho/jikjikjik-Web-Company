@@ -1,23 +1,570 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Fastify 서버 + 정적 페이지</title>
-    <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 40px; }
-      button { padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
-      pre { background: #f7f7f7; padding: 12px; border-radius: 8px; }
-    </style>
-  </head>
-  <body>
-    <h1>안녕하세요 👋</h1>
-    <p>이 페이지는 <strong>public/index.html</strong>에 있고, Fastify가 정적으로 서빙합니다.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>직직직 사업자 - AI 건설 인력 매칭 플랫폼</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/login-modal.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header>
+        <nav>
+            <div class="logo">직직직</div>
+            <div class="nav-links">
+                <a href="#features">주요 기능</a>
+                <a href="#dashboard">실제 화면</a>
+                <a href="#contact">문의하기</a>
+                <button class="btn-start" onclick="showLoginModal()">시작하기</button>
+            </div>
+        </nav>
+    </header>
 
-    <h2>API 테스트</h2>
-    <button id="timeBtn">/api/time 호출</button>
-    <pre id="out">결과 대기중…</pre>
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>
+                    건설 현장 인력 관리<br>
+                    <span class="highlight">AI로 간편하게</span>
+                </h1>
+                <p>
+                    복잡한 현장 인력 관리를 한 곳에서.<br>
+                    중개수수료 0%, 실시간 출퇴근 관리, 자동 서류 생성까지
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">0%</div>
+                        <div class="stat-label">중개수수료</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3초</div>
+                        <div class="stat-label">AI 매칭 시간</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">자동 서류화</div>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="showLoginModal()">무료로 시작하기</button>
+                    <button class="btn-secondary">데모 보기</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- 대시보드 미리보기 -->
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-buttons">
+                            <div class="mockup-btn red"></div>
+                            <div class="mockup-btn yellow"></div>
+                            <div class="mockup-btn green"></div>
+                        </div>
+                    </div>
+                    <div class="mockup-content">
+                        <div class="mockup-title"></div>
+                        <div class="mockup-cards">
+                            <div class="mockup-card"></div>
+                            <div class="mockup-card"></div>
+                            <div class="mockup-card"></div>
+                        </div>
+                        <div class="mockup-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script src="/js/app.js" defer></script>
-  </body>
+    <!-- 실제 서비스 화면 섹션 -->
+    <section class="service-demo" id="dashboard">
+        <div class="service-demo-container">
+            <h2 class="section-title">실제 서비스 화면</h2>
+            <p class="section-subtitle">직직직에서 실제로 제공하는 서비스 화면을 확인해보세요</p>
+
+            <!-- 메인 대시보드 -->
+            <div class="dashboard-preview">
+                <div class="dashboard-header">
+                    <h3 class="dashboard-title">오늘의 현장 현황</h3>
+                    <span class="dashboard-date">2025년 1월 15일 수요일</span>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title">전체 현장</div>
+                        <div class="dashboard-card-value">12개</div>
+                        <div class="dashboard-card-change change-positive">▲ 2개 증가</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title">오늘 출근 인원</div>
+                        <div class="dashboard-card-value">248명</div>
+                        <div class="dashboard-card-change change-positive">▲ 95% 출근율</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title">대기 중 지급</div>
+                        <div class="dashboard-card-value">32명</div>
+                        <div class="dashboard-card-change">4,160,000원</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title">이번 달 절감액</div>
+                        <div class="dashboard-card-value">762만원</div>
+                        <div class="dashboard-card-change change-positive">▲ 수수료 50% 절감</div>
+                    </div>
+                </div>
+
+                <!-- 현장별 인력 관리 -->
+                <div class="site-management">
+                    <div class="site-tabs">
+                        <div class="site-tab active">전체 현장</div>
+                        <div class="site-tab">진행중</div>
+                        <div class="site-tab">모집중</div>
+                        <div class="site-tab">완료</div>
+                    </div>
+                    <div class="site-list">
+                        <div class="site-item">
+                            <div class="site-info">
+                                <div>
+                                    <div class="site-name">강남 오피스텔 신축공사</div>
+                                    <div class="site-location">서울시 강남구 역삼동</div>
+                                </div>
+                                <div class="site-stats">
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">45</div>
+                                        <div class="site-stat-label">투입인원</div>
+                                    </div>
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">43</div>
+                                        <div class="site-stat-label">출근</div>
+                                    </div>
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">95%</div>
+                                        <div class="site-stat-label">출근율</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="site-actions">
+                                <button class="btn-action">출근부 보기</button>
+                                <button class="btn-action">인력 추가</button>
+                            </div>
+                        </div>
+                        <div class="site-item">
+                            <div class="site-info">
+                                <div>
+                                    <div class="site-name">판교 데이터센터 건설</div>
+                                    <div class="site-location">경기도 성남시 판교</div>
+                                </div>
+                                <div class="site-stats">
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">28</div>
+                                        <div class="site-stat-label">투입인원</div>
+                                    </div>
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">27</div>
+                                        <div class="site-stat-label">출근</div>
+                                    </div>
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">96%</div>
+                                        <div class="site-stat-label">출근율</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="site-actions">
+                                <button class="btn-action">출근부 보기</button>
+                                <button class="btn-action">인력 추가</button>
+                            </div>
+                        </div>
+                        <div class="site-item">
+                            <div class="site-info">
+                                <div>
+                                    <div class="site-name">부산 물류센터 증축</div>
+                                    <div class="site-location">부산시 강서구 신항만</div>
+                                </div>
+                                <div class="site-stats">
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">62</div>
+                                        <div class="site-stat-label">투입인원</div>
+                                    </div>
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">58</div>
+                                        <div class="site-stat-label">출근</div>
+                                    </div>
+                                    <div class="site-stat">
+                                        <div class="site-stat-value">93%</div>
+                                        <div class="site-stat-label">출근율</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="site-actions">
+                                <button class="btn-action">출근부 보기</button>
+                                <button class="btn-action">인력 추가</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 출퇴근 관리 화면 -->
+            <div class="attendance-preview">
+                <div class="attendance-header">
+                    <h3 class="attendance-title">실시간 출퇴근 관리</h3>
+                    <div class="attendance-filter">
+                        <button class="filter-btn active">전체</button>
+                        <button class="filter-btn">출근</button>
+                        <button class="filter-btn">지각</button>
+                        <button class="filter-btn">결근</button>
+                    </div>
+                </div>
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>근로자</th>
+                            <th>현장</th>
+                            <th>출근시간</th>
+                            <th>퇴근시간</th>
+                            <th>상태</th>
+                            <th>근무시간</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="worker-info">
+                                    <div class="worker-avatar">김</div>
+                                    <div>
+                                        <div class="worker-name">김철수</div>
+                                        <div class="worker-role">철근공</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>강남 오피스텔</td>
+                            <td>08:00</td>
+                            <td>18:00</td>
+                            <td><span class="status-badge status-present">정상출근</span></td>
+                            <td>10시간</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="worker-info">
+                                    <div class="worker-avatar">이</div>
+                                    <div>
+                                        <div class="worker-name">이영희</div>
+                                        <div class="worker-role">목수</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>판교 데이터센터</td>
+                            <td>08:15</td>
+                            <td>-</td>
+                            <td><span class="status-badge status-late">지각</span></td>
+                            <td>진행중</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="worker-info">
+                                    <div class="worker-avatar">박</div>
+                                    <div>
+                                        <div class="worker-name">박민수</div>
+                                        <div class="worker-role">용접공</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>부산 물류센터</td>
+                            <td>07:45</td>
+                            <td>-</td>
+                            <td><span class="status-badge status-present">정상출근</span></td>
+                            <td>진행중</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 임금 관리 섹션 -->
+            <div class="payment-section">
+                <div class="payment-header">
+                    <h3 class="payment-title">간편한 임금 지급 관리</h3>
+                    <div class="payment-actions">
+                        <button class="btn-payment">선택 지급</button>
+                        <button class="btn-payment">일괄 지급</button>
+                    </div>
+                </div>
+                <div class="payment-summary">
+                    <div class="payment-summary-card">
+                        <div class="payment-summary-label">이번 주 지급액</div>
+                        <div class="payment-summary-value">15,250,000원</div>
+                    </div>
+                    <div class="payment-summary-card">
+                        <div class="payment-summary-label">대기중</div>
+                        <div class="payment-summary-value">32명</div>
+                    </div>
+                    <div class="payment-summary-card">
+                        <div class="payment-summary-label">완료</div>
+                        <div class="payment-summary-value">216명</div>
+                    </div>
+                    <div class="payment-summary-card">
+                        <div class="payment-summary-label">절감 수수료</div>
+                        <div class="payment-summary-value">762,500원</div>
+                    </div>
+                </div>
+                <div class="payment-list">
+                    <div class="payment-item">
+                        <div class="payment-worker">
+                            <input type="checkbox" class="payment-checkbox">
+                            <div class="worker-info">
+                                <div class="worker-avatar">김</div>
+                                <div>
+                                    <div class="worker-name">김철수</div>
+                                    <div class="worker-role">철근공 · 강남 오피스텔</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="payment-amount">180,000원</div>
+                            <span class="payment-status status-pending">대기중</span>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-worker">
+                            <input type="checkbox" class="payment-checkbox">
+                            <div class="worker-info">
+                                <div class="worker-avatar">이</div>
+                                <div>
+                                    <div class="worker-name">이영희</div>
+                                    <div class="worker-role">목수 · 판교 데이터센터</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="payment-amount">165,000원</div>
+                            <span class="payment-status status-completed">완료</span>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-worker">
+                            <input type="checkbox" class="payment-checkbox">
+                            <div class="worker-info">
+                                <div class="worker-avatar">박</div>
+                                <div>
+                                    <div class="worker-name">박민수</div>
+                                    <div class="worker-role">용접공 · 부산 물류센터</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="payment-amount">200,000원</div>
+                            <span class="payment-status status-pending">대기중</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 자동 서류 생성 섹션 -->
+    <section class="document-section">
+        <div class="document-container">
+            <h2 class="section-title">기업 맞춤형 자동 서류 제작</h2>
+            <p class="section-subtitle">모든 필수 서류를 자동으로 생성하고 관리합니다</p>
+            
+            <div class="document-grid">
+                <div class="document-card">
+                    <div class="document-icon">📄</div>
+                    <h3 class="document-title">근로계약서</h3>
+                    <p class="document-desc">법적 기준에 맞는 표준 근로계약서 자동 생성</p>
+                </div>
+                <div class="document-card">
+                    <div class="document-icon">💰</div>
+                    <h3 class="document-title">임금명세서</h3>
+                    <p class="document-desc">일일 임금 자동 계산 및 세금 공제 내역 포함</p>
+                </div>
+                <div class="document-card">
+                    <div class="document-icon">✅</div>
+                    <h3 class="document-title">작업확인서</h3>
+                    <p class="document-desc">작업 내용 자동 기록 및 전자서명 관리</p>
+                </div>
+                <div class="document-card">
+                    <div class="document-icon">📊</div>
+                    <h3 class="document-title">출근부</h3>
+                    <p class="document-desc">QR 체크인 자동 기록 및 월별 집계</p>
+                </div>
+                <div class="document-card">
+                    <div class="document-icon">🏢</div>
+                    <h3 class="document-title">거래명세서</h3>
+                    <p class="document-desc">하도급 거래 내역 관리 및 세금계산서 발행</p>
+                </div>
+                <div class="document-card">
+                    <div class="document-icon">🛡️</div>
+                    <h3 class="document-title">안전관리서류</h3>
+                    <p class="document-desc">안전교육 이수증 및 보험가입 증명서 관리</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 주요 기능 섹션 -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="features-grid">
+                <div class="feature-content">
+                    <h3>현장별로 한눈에 관리하는<br>스마트 인력 시스템</h3>
+                    <p>여러 현장의 인력을 한 곳에서 관리하세요.<br>
+                    실시간 출퇴근 현황부터 임금 지급까지 모든 것을 통합 관리할 수 있습니다.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">현장별 인력 배치 및 관리</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">실시간 출퇴근 모니터링</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">AI 기반 최적 인력 매칭</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">통합 대시보드 제공</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-image">
+                    <div class="feature-placeholder">현장 관리 화면</div>
+                </div>
+            </div>
+
+            <div class="features-grid" style="margin-top: 80px;">
+                <div class="feature-image">
+                    <div class="feature-placeholder">QR 체크인 화면</div>
+                </div>
+                <div class="feature-content">
+                    <h3>QR 코드로 간편한<br>출퇴근 관리</h3>
+                    <p>복잡한 출퇴근 관리를 QR 코드 하나로 해결하세요.<br>
+                    정확한 근무 시간 측정과 자동 임금 계산까지 한 번에 처리됩니다.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">QR 코드 스캔으로 즉시 체크인/아웃</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">GPS 기반 위치 확인</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">자동 근무시간 계산</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span class="feature-text">실시간 출근 현황 확인</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 임금 지급 관리 기능 섹션 -->
+    <section class="payment-feature">
+      <div class="payment-feature-container">
+          <div class="features-grid">
+              <div class="feature-content">
+                  <h3>클릭 한 번으로 끝나는<br>임금 지급 관리</h3>
+                  <p>개별 정산부터 일괄 지급까지 모든 임금 관리를 간편하게.<br>
+                  중개수수료 0%로 기업과 근로자 모두에게 혜택을 제공합니다.</p>
+                  <div class="feature-list">
+                      <div class="feature-item">
+                          <div class="feature-icon">✓</div>
+                          <span class="feature-text">일괄 임금 지급 시스템</span>
+                      </div>
+                      <div class="feature-item">
+                          <div class="feature-icon">✓</div>
+                          <span class="feature-text">자동 임금 계산</span>
+                      </div>
+                      <div class="feature-item">
+                          <div class="feature-icon">✓</div>
+                          <span class="feature-text">중개수수료 0%</span>
+                      </div>
+                      <div class="feature-item">
+                          <div class="feature-icon">✓</div>
+                          <span class="feature-text">임금명세서 자동 발급</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="feature-image">
+                  <div class="feature-placeholder">임금 관리 화면</div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+    <!-- CTA 섹션 -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>건설 현장 관리의 새로운 기준</h2>
+            <p>지금 시작하고 첫 달 무료로 모든 기능을 체험해보세요</p>
+            <div class="cta-buttons">
+                <button class="btn-cta" onclick="showLoginModal()">무료로 시작하기</button>
+                <button class="btn-cta btn-cta-secondary">상담 신청하기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer id="contact">
+        <div class="footer-container">
+            <div class="footer-info">
+                <div class="footer-logo">직직직</div>
+                <div class="footer-desc">AI 기반 건설 인력 매칭 플랫폼</div>
+                <div class="footer-contact">
+                    <div>📞 1588-0000</div>
+                    <div>📧 contact@jikjikjik.com</div>
+                    <div>🏢 밀양시 삼문중앙로 2길 24</div>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h4>서비스</h4>
+                    <a href="#">인력 매칭</a>
+                    <a href="#">현장 관리</a>
+                    <a href="#">임금 관리</a>
+                    <a href="#">서류 자동화</a>
+                </div>
+                <div class="footer-section">
+                    <h4>지원</h4>
+                    <a href="#">고객센터</a>
+                    <a href="#">사용법 가이드</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">문의하기</a>
+                </div>
+                <div class="footer-section">
+                    <h4>회사</h4>
+                    <a href="#">회사소개</a>
+                    <a href="#">채용정보</a>
+                    <a href="#">파트너십</a>
+                    <a href="#">보도자료</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div>© 2025 직직직. All rights reserved.</div>
+                <div class="footer-legal">
+                    <a href="#">이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                    <a href="#">사업자등록번호: 123-45-67890</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <!-- JavaScript 파일 -->
+    <script src="./js/main.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/login.js"></script>
+
+    <!-- 로그인 모달 -->
+    <div id="loginModalContainer"></div>
+  
+  </div>
+</body>
 </html>
